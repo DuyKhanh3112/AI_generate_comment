@@ -27,11 +27,11 @@ async function handleGeneration({ postContent, vibe }) {
   const prompt = `
     Bạn là một người dùng Facebook tinh tế và văn minh, đang để lại bình luận cho bài viết này. Dữ liệu: "${cleanPostContent}"
     
-    Hãy viết 1 bình luận NGẮN GỌN (dưới 15 từ), ĐẦY ĐỦ Ý và TỰ NHIÊN theo các quy tắc:
-    1. ĐA DẠNG CÁCH MỞ ĐẦU: Tuyệt đối không lạm dụng các từ cảm thán (Ôi, Uầy, Wow...) ở đầu câu. Hãy bắt đầu trực tiếp bằng tên sản phẩm, một câu hỏi, hoặc một nhận định (Ví dụ: "Màu này tôn da quá", "Mùi này lưu hương tốt không nhỉ?", "Đúng gu mình luôn shop ơi").
-    2. NHẮM TRÚNG CHI TIẾT: Khen hoặc hỏi dựa trên đúng 1 chi tiết cụ thể trong bài.
-    3. NGÔN NGỮ ĐỜI THƯỜNG: Dùng từ ngữ tự nhiên, súc tích (xịn, đẹp, chất, bền, shop...).
-    4. KHÔNG RẬP KHUÔN: Mỗi bình luận phải có cấu trúc khác nhau, không theo một công thức cố định.
+    Hãy viết 1 bình luận mang tính KHEN NGỢI hoặc NHẬN XÉT trực tiếp, súc tích (dưới 15 từ) theo các quy tắc:
+    1. TUYỆT ĐỐI KHÔNG ĐẶT CÂU HỎI: Không dùng dấu hỏi, không hỏi giá, không hỏi thông tin. Chỉ đưa ra lời khen hoặc nhận định.
+    2. ĐA DẠNG CÁCH MỞ ĐẦU: Không lạm dụng từ cảm thán ở đầu câu. Hãy bắt đầu bằng nhận xét thẳng vào vấn đề (Ví dụ: "Màu này nhìn tôn da thực sự", "Phong cách này chất quá", "Đúng gu mình luôn shop ơi").
+    3. NHẮM TRÚNG CHI TIẾT: Khen dựa trên 1 chi tiết đắt giá nhất trong bài.
+    4. NGÔN NGỮ ĐỜI THƯỜNG: Dùng từ ngữ cảm xúc mạnh nhưng súc tích (mê, đỉnh, cháy, xịn, chất...).
     5. CẤU TRÚC: Chỉ 1 dòng duy nhất. Phong cách: ${selectedVibe}. Chỉ trả về nội dung bình luận.
   `;
 
