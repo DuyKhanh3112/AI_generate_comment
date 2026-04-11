@@ -25,15 +25,14 @@ async function handleGeneration({ postContent, vibe }) {
   }
 
   const prompt = `
-    Bạn là một người dùng Facebook Việt Nam sành điệu.
-    Hãy viết 1 bình luận thực tế, ngắn gọn cho bài đăng sau: "${cleanPostContent}"
+    Bạn là một người dùng Facebook tinh tế và văn minh, đang để lại bình luận cho bài viết này. Dữ liệu: "${cleanPostContent}"
     
-    YÊU CẦU QUAN TRỌNG:
-    1. Nhắc đến ít nhất 1 chi tiết/từ khóa/tên cụ thể xuất hiện trong bài đăng trên.
-    2. Tuyệt đối không khen chung chung. Tuyệt đối không nói về "nước hoa" nếu bài đăng không nhắc tới.
-    3. Trình bày dưới dạng 1 câu nói tự nhiên, súc tích.
-    4. Phong cách: ${selectedVibe}.
-    5. Chỉ trả về nội dung bình luận.
+    Hãy viết 1 bình luận NGẮN GỌN (dưới 15 từ), ĐẦY ĐỦ Ý và TỰ NHIÊN theo các quy tắc:
+    1. ĐA DẠNG CÁCH MỞ ĐẦU: Tuyệt đối không lạm dụng các từ cảm thán (Ôi, Uầy, Wow...) ở đầu câu. Hãy bắt đầu trực tiếp bằng tên sản phẩm, một câu hỏi, hoặc một nhận định (Ví dụ: "Màu này tôn da quá", "Mùi này lưu hương tốt không nhỉ?", "Đúng gu mình luôn shop ơi").
+    2. NHẮM TRÚNG CHI TIẾT: Khen hoặc hỏi dựa trên đúng 1 chi tiết cụ thể trong bài.
+    3. NGÔN NGỮ ĐỜI THƯỜNG: Dùng từ ngữ tự nhiên, súc tích (xịn, đẹp, chất, bền, shop...).
+    4. KHÔNG RẬP KHUÔN: Mỗi bình luận phải có cấu trúc khác nhau, không theo một công thức cố định.
+    5. CẤU TRÚC: Chỉ 1 dòng duy nhất. Phong cách: ${selectedVibe}. Chỉ trả về nội dung bình luận.
   `;
 
   console.log('📝 SocialAI [Final Prompt Sent to AI]:', prompt);
@@ -48,8 +47,8 @@ async function handleGeneration({ postContent, vibe }) {
 }
 
 async function handleGroqGeneration(apiKey, promptContent) {
-  let modelName = 'llama-3.1-70b-versatile'; 
-  
+  let modelName = 'llama-3.1-70b-versatile';
+
   try {
     const listRes = await fetch('https://api.groq.com/openai/v1/models', {
       headers: { 'Authorization': `Bearer ${apiKey}` }
@@ -61,36 +60,36 @@ async function handleGroqGeneration(apiKey, promptContent) {
         .filter(m => m.id.toLowerCase().includes('llama'))
         .filter(m => !m.id.toLowerCase().includes('guard'))
         .filter(m => !m.id.toLowerCase().includes('classify'));
-      
+
       // Prioritize large models first
       chatModels.sort((a, b) => b.id.localeCompare(a.id));
-      
+
       if (chatModels.length > 0) {
         modelName = chatModels[0].id;
       }
     }
-  } catch (err) {}
+  } catch (err) { }
 
   console.log(`🚀 SocialAI [Using Model]: ${modelName}`);
-  
+
   const apiUrl = 'https://api.groq.com/openai/v1/chat/completions';
   const response = await fetch(apiUrl, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
-    body: JSON.stringify({ 
-      model: modelName, 
+    body: JSON.stringify({
+      model: modelName,
       messages: [
         { role: 'system', content: 'Bạn là người dùng Facebook Việt Nam. Chỉ trả về bình luận, không trả về số hay mã code.' },
         { role: 'user', content: promptContent }
-      ], 
+      ],
       temperature: 0.7,
-      max_tokens: 150 
+      max_tokens: 150
     })
   });
-  
+
   const data = await response.json();
   console.log('📡 SocialAI [Raw Data from Groq]:', data);
-  
+
   if (data.error) throw new Error(`Groq Error: ${data.error.message}`);
   const result = data.choices[0].message.content.trim();
   console.log('✨ SocialAI [Cleaned Result]:', result);
@@ -107,7 +106,7 @@ async function handleGeminiGeneration(apiKey, prompt) {
       availableModels = listData.models
         .filter(m => m.supportedGenerationMethods.includes('generateContent'))
         .map(m => m.name.split('/').pop());
-      
+
       availableModels.sort((a, b) => {
         if (a.includes('flash') && !b.includes('flash')) return -1;
         if (a.includes('3.1') && !b.includes('3.1')) return 1;
