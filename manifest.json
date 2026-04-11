@@ -1,17 +1,16 @@
 {
   "manifest_version": 3,
   "name": "SocialAI - Intelligent Comment Generator",
-  "version": "1.0",
-  "description": "Automatically generate engaging social media comments using AI.",
+  "short_name": "SocialAI",
+  "version": "1.0.0",
+  "description": "Tự động tạo bình luận thông minh, lịch sự và tự nhiên cho Facebook bằng công nghệ AI (Gemini/Groq).",
   "permissions": [
-    "storage",
-    "activeTab"
+    "storage"
   ],
   "host_permissions": [
     "https://*.facebook.com/*",
-    "https://*.linkedin.com/*",
-    "https://*.twitter.com/*",
-    "https://*.x.com/*"
+    "https://generativelanguage.googleapis.com/*",
+    "https://api.groq.com/*"
   ],
   "action": {
     "default_popup": "popup.html",
@@ -27,10 +26,7 @@
   "content_scripts": [
     {
       "matches": [
-        "https://*.facebook.com/*",
-        "https://*.linkedin.com/*",
-        "https://*.twitter.com/*",
-        "https://*.x.com/*"
+        "https://*.facebook.com/*"
       ],
       "js": ["content.js"],
       "css": ["content.css"]
