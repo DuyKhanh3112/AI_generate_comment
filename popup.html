@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SocialAI Settings</title>
+  <link rel="stylesheet" href="popup.css">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo-area">
+        <div class="glow"></div>
+        <h1>Social<span>AI</span></h1>
+      </div>
+      <p class="subtitle">Next-gen Interaction</p>
+    </header>
+
+    <main>
+      <div class="input-group">
+        <label for="provider">AI Provider</label>
+        <select id="provider" class="provider-select">
+          <option value="gemini">Google Gemini</option>
+          <option value="groq">Groq (Llama 3 - Recommended)</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label for="apiKey" id="keyLabel">API Key</label>
+        <div class="input-wrapper">
+          <input type="password" id="apiKey" placeholder="Paste your key here...">
+          <button id="saveKey">Save</button>
+        </div>
+        <p class="help-text" id="helpLink">Get one at <a href="https://aistudio.google.com/" target="_blank">Google AI Studio</a></p>
+      </div>
+
+      <div class="input-group">
+        <label>Default Vibe</label>
+        <div class="vibe-grid">
+          <button class="vibe-btn active" data-vibe="friendly">😊 Friendly</button>
+          <button class="vibe-btn" data-vibe="professional">💼 Profesh</button>
+          <button class="vibe-btn" data-vibe="witty">⚡ Witty</button>
+          <button class="vibe-btn" data-vibe="supportive">❤️ Supportive</button>
+        </div>
+      </div>
+
+      <div class="status-card">
+        <div class="status-indicator online"></div>
+        <span>AI Engine Ready</span>
+      </div>
+    </main>
+
+    <footer>
+      <p>Crafted for visual disruptors</p>
+    </footer>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
