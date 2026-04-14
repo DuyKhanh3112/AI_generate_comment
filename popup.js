@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const providerSelect = document.getElementById('provider');
   const keyLabel = document.getElementById('keyLabel');
   const helpLink = document.getElementById('helpLink');
+  const toggleAutoBtn = document.getElementById('toggleAuto');
+  const statusText = document.getElementById('statusText');
 
   const providerInfo = {
     gemini: {
@@ -18,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // Load existing settings
-  chrome.storage.local.get(['geminiApiKey', 'defaultVibe', 'provider'], (result) => {
+  chrome.storage.local.get(['geminiApiKey', 'defaultVibe', 'provider', 'isAutoMode'], (result) => {
     console.log('📦 Loading settings:', result);
     if (result.geminiApiKey) {
       apiKeyInput.value = result.geminiApiKey;
@@ -29,6 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (result.provider) {
       providerSelect.value = result.provider;
       updateProviderUI(result.provider);
+    }
+    if (result.isAutoMode) {
+      updateAutoUI(true);
     }
   });
 
@@ -76,5 +81,36 @@ document.addEventListener('DOMContentLoaded', () => {
     vibeBtns.forEach(btn => {
       btn.classList.toggle('active', btn.dataset.vibe === vibe);
     });
+  }
+
+  // Auto Mode Toggle
+  toggleAutoBtn.addEventListener('click', () => {
+    chrome.storage.local.get(['isAutoMode'], (result) => {
+      const newState = !result.isAutoMode;
+      chrome.storage.local.set({ isAutoMode: newState }, () => {
+        updateAutoUI(newState);
+        
+        // Notify active tab's content script
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+          if (tabs[0]) {
+            chrome.tabs.sendMessage(tabs[0].id, { type: 'TOGGLE_AUTO_MODE', enabled: newState });
+          }
+        });
+      });
+    });
+  });
+
+  function updateAutoUI(enabled) {
+    if (enabled) {
+      toggleAutoBtn.classList.add('running');
+      toggleAutoBtn.querySelector('.text').textContent = 'Dừng Chế Độ Tự Động';
+      toggleAutoBtn.querySelector('.icon').textContent = '🛑';
+      statusText.textContent = 'Auto Bot is Active...';
+    } else {
+      toggleAutoBtn.classList.remove('running');
+      toggleAutoBtn.querySelector('.text').textContent = 'Bật Chế Độ Tự Động';
+      toggleAutoBtn.querySelector('.icon').textContent = '🤖';
+      statusText.textContent = 'AI Engine Ready';
+    }
   }
 });
