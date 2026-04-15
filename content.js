@@ -52,7 +52,7 @@ async function typeText(el, text) {
   for (let i = 0; i < words.length; i++) {
     // Gõ theo từ với tốc độ cao hơn để tạo cảm giác mượt mà
     document.execCommand('insertText', false, words[i] + (i < words.length - 1 ? ' ' : ''));
-    
+
     // Kích hoạt sự kiện input
     el.dispatchEvent(new Event('input', { bubbles: true }));
 
@@ -69,34 +69,53 @@ async function typeText(el, text) {
 
 // ================= GET CONTENT =================
 function getPostContent(post) {
-  // Ưu tiên các thẻ chứa nội dung bài viết chính (thường có data-ad-preview)
+  let content = '';
+  
+  // 1. Extract main text
   const mainSelectors = [
     '[data-ad-preview="message"]',
     '[data-ad-comet-preview="message"]',
     '[data-testid="post_message"]',
-    'div[dir="auto"].x1iorvi4.x1pi3ozi' // Selector đặc trưng cho bài viết FB Comet
+    'div[dir="auto"].x1iorvi4.x1pi3ozi'
   ];
 
   for (const s of mainSelectors) {
     const el = post.querySelector(s);
-    if (el && el.innerText.trim().length > 5) return el.innerText.trim().slice(0, 1000);
+    if (el && el.innerText.trim().length > 5) {
+      content = el.innerText.trim();
+      break;
+    }
   }
 
-  // Fallback: Tìm thẻ div có dir="auto" nhưng KHÔNG nằm trong vùng bình luận
-  const allDivs = Array.from(post.querySelectorAll('div[dir="auto"]'));
-  const mainText = allDivs.find(el => {
-    const text = el.innerText.trim();
-    // Loại bỏ nếu quá ngắn, hoặc nằm trong thẻ 'a' (link), hoặc nằm trong vùng comment (thường có role="article" con)
-    if (text.length < 20) return false;
-    if (el.closest('a') || el.closest('button') || el.closest('[role="complementary"]')) return false;
+  if (!content) {
+    const allDivs = Array.from(post.querySelectorAll('div[dir="auto"]'));
+    const mainText = allDivs.find(el => {
+      const text = el.innerText.trim();
+      if (text.length < 20) return false;
+      if (el.closest('a') || el.closest('button') || el.closest('[role="complementary"]')) return false;
+      const isInsideComment = el.closest('ul') || el.closest('[role="article"] [role="article"]');
+      return !isInsideComment;
+    });
+    content = mainText ? mainText.innerText.trim() : post.innerText.slice(0, 500);
+  }
 
-    // Facebook Comet: Bình luận cũ thường nằm trong các thẻ có role="article" lồng nhau
-    // Chúng ta chỉ muốn lấy text ở cấp độ bài viết gốc
-    const isInsideComment = el.closest('ul') || el.closest('[role="article"] [role="article"]');
-    return !isInsideComment;
+  // 2. Extract image descriptions (Facebook's auto-generated ALT tags)
+  const imgDescriptions = [];
+  post.querySelectorAll('img').forEach(img => {
+    const alt = img.getAttribute('alt');
+    // Filter out generic or empty ALT tags
+    if (alt && alt.length > 10 && 
+        !alt.includes('No photo description') && 
+        !alt.includes('May be an image of')) {
+      imgDescriptions.push(alt);
+    }
   });
 
-  return mainText ? mainText.innerText.trim().slice(0, 1000) : post.innerText.slice(0, 500);
+  if (imgDescriptions.length > 0) {
+    content += '\n[Bối cảnh hình ảnh: ' + imgDescriptions.join(', ') + ']';
+  }
+
+  return content.slice(0, 1200);
 }
 
 // ================= FILTER POST =================
@@ -208,6 +227,77 @@ function loop() {
     if (isAutoMode) timer = setTimeout(loop, random(CONFIG.MIN_DELAY, CONFIG.MAX_DELAY));
   });
 }
+
+// ================= MAGIC BUTTON INJECTION =================
+function injectMagicButtons() {
+  const textboxes = document.querySelectorAll('[role="textbox"]');
+
+  textboxes.forEach(box => {
+    // Skip if already has button or is not a comment box (Facebook has many textboxes)
+    if (box.dataset.socialAiInjected) return;
+
+    // Detect if it's likely a comment box
+    const isCommentBox = box.closest('form') || box.closest('[role="presentation"]') || box.getAttribute('aria-label')?.toLowerCase().includes('bình luận');
+    if (!isCommentBox) return;
+
+    box.dataset.socialAiInjected = 'true';
+
+    // Find a stable parent to append our button
+    const container = box.parentElement;
+    if (!container) return;
+
+    // Ensure container has relative positioning for our absolute button
+    if (getComputedStyle(container).position === 'static') {
+      container.style.position = 'relative';
+    }
+
+    const btn = document.createElement('button');
+    btn.className = 'social-ai-magic-btn';
+    btn.innerHTML = '✨';
+    btn.title = 'Tự động tạo bình luận bằng AI';
+
+    btn.onclick = async (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (btn.classList.contains('loading')) return;
+
+      btn.classList.add('loading');
+      btn.innerHTML = '⏳';
+
+      try {
+        const post = box.closest('[role="article"], [aria-posinset], div.x1yztbdb.x1n2onr6.xh8yej3') || document.querySelector('[role="dialog"]');
+        const postContent = getPostContent(post || document.body);
+
+        const res = await chrome.runtime.sendMessage({
+          type: 'GENERATE_COMMENT',
+          payload: { postContent }
+        });
+
+        if (res?.success) {
+          await typeText(box, res.comment);
+        } else {
+          console.error('SocialAI: Error', res?.error);
+        }
+      } catch (err) {
+        console.error('SocialAI: Click handler failed', err);
+      } finally {
+        btn.classList.remove('loading');
+        btn.innerHTML = '✨';
+      }
+    };
+
+    container.appendChild(btn);
+  });
+}
+
+// ================= INITIALIZE & OBSERVE =================
+const observer = new MutationObserver(() => {
+  injectMagicButtons();
+});
+
+observer.observe(document.body, { childList: true, subtree: true });
+injectMagicButtons();
 
 // ================= EVENTS =================
 chrome.runtime.onMessage.addListener((msg) => {

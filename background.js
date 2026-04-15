@@ -27,16 +27,17 @@ async function handleGeneration({ postContent, vibe }) {
     .trim();
 
   const prompt = `
-    Bạn là một người dùng Facebook bình thường, lịch sự. Hãy đọc bài viết này: "${cleanPostContent}"
+    Bạn là một người dùng Facebook Việt Nam tự nhiên, hay tương tác. 
+    Hãy đọc nội dung bài viết sau (bao gồm cả mô tả hình ảnh nếu có trong dấu ngoặc vuông): "${cleanPostContent}"
 
-    Nhiệm vụ: Viết 1 câu bình luận NGẮN GỌN (dưới 12 từ) thể hiện sự quan tâm hoặc đồng tình.
+    Nhiệm vụ: Viết duy nhất 1 câu bình luận ngắn (dưới 12 từ) thật tự nhiên.
     
     Quy tắc bắt buộc:
-    1. TỰ NHIÊN: Viết như một người bạn bình luận, không dùng ngôn từ quá trang trọng hay máy móc.
-    2. KHÔNG CÂU HỎI: Chỉ đưa ra nhận xét hoặc lời khen nhẹ nhàng. Tuyệt đối không có dấu hỏi.
-    3. TRỰC TIẾP: Đi thẳng vào nội dung chính của bài viết. Tránh các từ cảm thán thừa thãi như "Ôi", "Wao", "Tuyệt vời quá".
-    4. NGÔN NGỮ ĐỜI THƯỜNG: Dùng từ ngữ giản dị, gần gũi (ví dụ: "chuẩn luôn", "xịn quá", "đúng thật", "hay nè").
-    5. CẤU TRÚC: Chỉ trả về 1 dòng nội dung duy nhất. Phong cách: ${selectedVibe}.
+    1. TỰ NHIÊN: Dùng ngôn ngữ đời thường, gần gũi (ví dụ: "xịn quá", "chuẩn luôn", "mê nha", "đỉnh thật sự", "hợp lý nè").
+    2. TRỰC TIẾP: Đi thẳng vào nội dung bài viết hoặc hình ảnh.
+    3. KHÔNG MÁY MÓC: Tuyệt đối không dùng các mẫu câu AI sáo rỗng như "Cảm ơn bạn chia sẻ", "Rất hữu ích".
+    4. KHÔNG DẤU HỎI: Chỉ đưa ra nhận xét hoặc cảm thán.
+    5. CẤU TRÚC: Chỉ trả về đúng 1 dòng nội dung bình luận. Phong cách: ${selectedVibe}.
   `;
 
   console.log('SocialAI [Final Prompt Sent to AI]:', prompt);

@@ -1,49 +1,61 @@
 .social-ai-magic-btn {
   position: absolute;
-  right: 12px;
+  right: 8px;
   bottom: 8px;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: none;
-  background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: linear-gradient(135deg, #6366f1, #a855f7);
   color: white;
   cursor: pointer;
   z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
-  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  font-size: 14px;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  overflow: hidden;
+}
+
+.social-ai-magic-btn::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3), transparent 70%);
+  transform: scale(0);
+  transition: transform 0.6s ease;
+  pointer-events: none;
 }
 
 .social-ai-magic-btn:hover {
-  transform: scale(1.15) rotate(15deg);
-  box-shadow: 0 6px 16px rgba(139, 92, 246, 0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+  background: linear-gradient(135deg, #4f46e5, #9333ea);
+}
+
+.social-ai-magic-btn:hover::before {
+  transform: scale(1);
+}
+
+.social-ai-magic-btn:active {
+  transform: scale(0.95);
 }
 
 .social-ai-magic-btn.loading {
-  animation: social-ai-pulse 1.5s infinite;
+  animation: social-ai-spin 2s linear infinite;
   pointer-events: none;
   opacity: 0.8;
+  background: #6366f1;
 }
 
-@keyframes social-ai-pulse {
-  0% {
-    transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.7);
-  }
-
-  70% {
-    transform: scale(1.1);
-    box-shadow: 0 0 0 10px rgba(139, 92, 246, 0);
-  }
-
-  100% {
-    transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(139, 92, 246, 0);
-  }
+@keyframes social-ai-spin {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
 }
 
 /* Status Indicator */

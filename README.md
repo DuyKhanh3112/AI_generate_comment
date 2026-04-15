@@ -11,7 +11,8 @@
 ## ✨ Tính năng nổi bật
 
 - **🤖 Chế độ tự động hoàn toàn (Full Auto Mode):** Tự động cuộn, tìm kiếm bài viết mới và thực hiện tương tác mà không cần sự can thiệp của người dùng.
-- **🧠 Phân tích ngữ cảnh (Context-Aware):** AI thực sự đọc và hiểu nội dung bài viết trước khi đưa ra gợi ý, đảm bảo bình luận luôn đúng trọng tâm, tránh bị coi là spam.
+- **✨ Nút Magic (Manual Action):** Tạo bình luận tức thì cho từng bài viết cụ thể bằng cách nhấn vào biểu tượng AI ngay tại ô nhập liệu.
+- **🧠 Phân tích ngữ cảnh toàn diện:** AI không chỉ đọc văn bản mà còn phân tích **nội dung hình ảnh** (thông qua ALT tags) để đưa ra bình luận chính xác và tự nhiên nhất.
 - **⚡ Đa dạng AI Provider:** Hỗ trợ cả **Google Gemini API** và **Groq API (Llama 3)** cho tốc độ phản hồi cực nhanh.
 - **🎨 Tùy chỉnh phong cách (Vibe Control):**
   - 😊 **Friendly:** Thân thiện, hòa đồng.
@@ -46,13 +47,16 @@ Mở popup SocialAI, chọn Provider, dán Key và nhấn **Save**.
 
 ---
 
-## 🚀 Cách sử dụng
-
+### 🚀 Cách sử dụng
+#### Cách 1: Chế độ Tự động (Auto Mode)
 1. Truy cập **Facebook.com**.
 2. Mở popup **SocialAI** từ thanh công cụ trình duyệt.
-3. Nhấp vào nút **"Bật Chế Độ Tự Động (Auto Mode)"**.
-4. Treo máy và quan sát: SocialAI sẽ tự động cuộn trang, tìm bài viết, "suy nghĩ" nội dung và đăng bình luận cho bạn.
-5. Để dừng lại, chỉ cần nhấn nút **"Dừng Chế Độ Tự Động"** trong popup.
+3. Nhấp vào nút **"Bật Chế Độ Tự Động"**. SocialAI sẽ tự động cuộn và tương tác.
+
+#### Cách 2: Chế độ Thủ công (Magic Button)
+1. Tại ô nhập bình luận của bất kỳ bài viết nào, bạn sẽ thấy biểu tượng **✨**.
+2. Nhấn vào biểu tượng **✨** để SocialAI phân tích bài viết và tự động gõ nội dung bình luận gợi ý vào ô nhập.
+3. Bạn có thể chỉnh sửa lại nội dung hoặc nhấn Enter để đăng ngay.
 
 ---
 
