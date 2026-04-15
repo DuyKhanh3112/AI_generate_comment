@@ -10,7 +10,7 @@ const CONFIG = {
   COMMENT_PROBABILITY: 1.0
 };
 
-console.log('⚡ SocialAI TURBO (Optimized) Loaded');
+//console.log('⚡ SocialAI TURBO (Optimized) Loaded');
 
 // ================= STATE =================
 let isAutoMode = false;
@@ -48,21 +48,23 @@ async function typeText(el, text) {
   if (!el) return;
   el.focus();
 
-  // Chiến thuật: "Dán" cả đoạn văn bản cùng lúc để tránh lỗi bộ gõ Tiếng Việt (Telex/Unikey)
-  // Việc gõ từng ký tự sẽ bị bộ gõ can thiệp làm sai lệch chữ.
-  const selection = window.getSelection();
-  const range = document.createRange();
-  range.selectNodeContents(el);
-  range.collapse(false);
-  selection.removeAllRanges();
-  selection.addRange(range);
+  const words = text.split(' ');
+  for (let i = 0; i < words.length; i++) {
+    // Gõ theo từ với tốc độ cao hơn để tạo cảm giác mượt mà
+    document.execCommand('insertText', false, words[i] + (i < words.length - 1 ? ' ' : ''));
+    
+    // Kích hoạt sự kiện input
+    el.dispatchEvent(new Event('input', { bubbles: true }));
 
-  // Thực hiện chèn cả khối văn bản
-  document.execCommand('insertText', false, text);
-  
-  // Kích hoạt sự kiện input để Facebook biết có thay đổi
-  el.dispatchEvent(new Event('input', { bubbles: true }));
-  console.log('⌨️ Đã nhập nội dung (chế độ an toàn cho Tiếng Việt)');
+    // Di chuyển con trỏ xuống cuối (giúp hiệu ứng mượt hơn)
+    const sel = window.getSelection();
+    if (sel.rangeCount > 0) sel.getRangeAt(0).collapse(false);
+
+    // Nghỉ ngắn (50ms - 120ms)
+    await sleep(random(50, 120));
+  }
+
+  //console.log('⌨️ Đã gõ xong nội dung (hiệu ứng gõ tay an toàn)');
 }
 
 // ================= GET CONTENT =================
@@ -119,7 +121,7 @@ async function processPost() {
   isProcessing = true;
 
   try {
-    console.log('--- 🔍 Quét bài viết mới ---');
+    //console.log('--- 🔍 Quét bài viết mới ---');
     const posts = Array.from(document.querySelectorAll('[role="article"], [aria-posinset], div.x1yztbdb.x1n2onr6.xh8yej3'))
       .filter(p => !p.dataset.aiProcessed && isValidPost(p));
 
@@ -152,8 +154,8 @@ async function processPost() {
     // 🤖 AI
     const contentSource = document.querySelector('[role="dialog"]') || target;
     const postContent = getPostContent(contentSource);
-    
-    console.log('%c📄 NỘI DUNG BÀI VIẾT TRÍCH XUẤT:', 'background: #222; color: #bada55; font-size: 12px; padding: 4px;', postContent);
+
+    //console.log('%c📄 NỘI DUNG BÀI VIẾT TRÍCH XUẤT:', 'background: #222; color: #bada55; font-size: 12px; padding: 4px;', postContent);
 
     const res = await chrome.runtime.sendMessage({
       type: 'GENERATE_COMMENT',
@@ -165,7 +167,7 @@ async function processPost() {
       return;
     }
 
-    console.log('%c🤖 AI COMMENT:', 'background: #222; color: #00ff00; font-size: 14px; font-weight: bold; padding: 4px;', res.comment);
+    //console.log('%c🤖 AI COMMENT:', 'background: #222; color: #00ff00; font-size: 14px; font-weight: bold; padding: 4px;', res.comment);
 
     // ✍️ Submit
     await typeText(box, res.comment);

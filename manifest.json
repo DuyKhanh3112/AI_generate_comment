@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "SocialAI - Intelligent Comment Generator",
+  "name": "SocialAI - Intelligent Facebook Comment Generator",
   "short_name": "SocialAI",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Tự động tạo bình luận thông minh, lịch sự và tự nhiên cho Facebook bằng công nghệ AI (Gemini/Groq).",
   "permissions": [
     "storage"
@@ -28,8 +28,12 @@
       "matches": [
         "https://*.facebook.com/*"
       ],
-      "js": ["content.js"],
-      "css": ["content.css"]
+      "js": [
+        "content.js"
+      ],
+      "css": [
+        "content.css"
+      ]
     }
   ],
   "icons": {
