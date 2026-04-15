@@ -45,7 +45,11 @@ function findCommentButton(post) {
 
 // ================= FAST TYPE =================
 async function typeText(el, text) {
+  if (!el) return;
   el.focus();
+
+  // Chiến thuật: "Dán" cả đoạn văn bản cùng lúc để tránh lỗi bộ gõ Tiếng Việt (Telex/Unikey)
+  // Việc gõ từng ký tự sẽ bị bộ gõ can thiệp làm sai lệch chữ.
   const selection = window.getSelection();
   const range = document.createRange();
   range.selectNodeContents(el);
@@ -53,10 +57,12 @@ async function typeText(el, text) {
   selection.removeAllRanges();
   selection.addRange(range);
 
-  for (let i = 0; i < text.length; i++) {
-    document.execCommand('insertText', false, text[i]);
-    if (i % 2 === 0) await sleep(random(10, 30));
-  }
+  // Thực hiện chèn cả khối văn bản
+  document.execCommand('insertText', false, text);
+  
+  // Kích hoạt sự kiện input để Facebook biết có thay đổi
+  el.dispatchEvent(new Event('input', { bubbles: true }));
+  console.log('⌨️ Đã nhập nội dung (chế độ an toàn cho Tiếng Việt)');
 }
 
 // ================= GET CONTENT =================
