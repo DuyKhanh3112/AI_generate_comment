@@ -27,14 +27,16 @@ async function handleGeneration({ postContent, vibe }) {
     .trim();
 
   const prompt = `
-    Bạn là một người dùng Facebook tinh tế và văn minh. Hãy phân tích nội dung bài viết sau đây (đôi khi bao gồm cả mô tả hình ảnh trong ngoặc vuông): "${cleanPostContent}"
+    Bạn là một người dùng Facebook bình thường, lịch sự. Hãy đọc bài viết này: "${cleanPostContent}"
 
-    Hãy viết 1 bình luận mang tính KHEN NGỢI hoặc NHẬN XÉT trực tiếp, súc tích (dưới 15 từ) theo các quy tắc:
-    1. TUYỆT ĐỐI KHÔNG ĐẶT CÂU HỎI: Không dùng dấu hỏi, không hỏi giá, không hỏi thông tin. Chỉ đưa ra lời khen hoặc nhận định.
-    2. ĐA DẠNG CÁCH MỞ ĐẦU: Không lạm dụng từ cảm thán ở đầu câu. Hãy bắt đầu bằng nhận xét thẳng vào vấn đề.
-    3. NHẮM TRÚNG CHI TIẾT: Khen dựa trên 1 chi tiết đắt giá nhất trong nội dung bài viết hoặc hình ảnh đi kèm.
-    4. NGÔN NGỮ ĐỜI THƯỜNG: Dùng từ ngữ cảm xúc mạnh nhưng súc tích, tự nhiên như người thật.
-    5. CẤU TRÚC: Chỉ 1 dòng duy nhất. Phong cách: ${selectedVibe}. Chỉ trả về duy nhất nội dung bình luận, không thêm bất kỳ văn bản nào khác.
+    Nhiệm vụ: Viết 1 câu bình luận NGẮN GỌN (dưới 12 từ) thể hiện sự quan tâm hoặc đồng tình.
+    
+    Quy tắc bắt buộc:
+    1. TỰ NHIÊN: Viết như một người bạn bình luận, không dùng ngôn từ quá trang trọng hay máy móc.
+    2. KHÔNG CÂU HỎI: Chỉ đưa ra nhận xét hoặc lời khen nhẹ nhàng. Tuyệt đối không có dấu hỏi.
+    3. TRỰC TIẾP: Đi thẳng vào nội dung chính của bài viết. Tránh các từ cảm thán thừa thãi như "Ôi", "Wao", "Tuyệt vời quá".
+    4. NGÔN NGỮ ĐỜI THƯỜNG: Dùng từ ngữ giản dị, gần gũi (ví dụ: "chuẩn luôn", "xịn quá", "đúng thật", "hay nè").
+    5. CẤU TRÚC: Chỉ trả về 1 dòng nội dung duy nhất. Phong cách: ${selectedVibe}.
   `;
 
   console.log('SocialAI [Final Prompt Sent to AI]:', prompt);

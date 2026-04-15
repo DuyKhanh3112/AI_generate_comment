@@ -113,4 +113,23 @@ document.addEventListener('DOMContentLoaded', () => {
       statusText.textContent = 'AI Engine Ready';
     }
   }
+
+  // Modal support logic
+  const modal = document.getElementById('supportModal');
+  const openBtn = document.getElementById('openSupport');
+  const closeBtn = document.querySelector('.close-modal');
+
+  openBtn.addEventListener('click', () => {
+    modal.style.display = 'block';
+  });
+
+  closeBtn.addEventListener('click', () => {
+    modal.style.display = 'none';
+  });
+
+  window.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.style.display = 'none';
+    }
+  });
 });
