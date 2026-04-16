@@ -1,61 +1,97 @@
+/* SocialAI Toast Notification */
+.social-ai-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 2147483647;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.social-ai-toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+.social-ai-toast.error {
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+.social-ai-toast.success {
+  border-color: rgba(16, 185, 129, 0.5);
+}
+
+/* Premium Magic Button */
 .social-ai-magic-btn {
   position: absolute;
   right: 8px;
-  bottom: 8px;
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  bottom: 1px;
+  /* Moved down as requested */
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
   background: linear-gradient(135deg, #6366f1, #a855f7);
   color: white;
   cursor: pointer;
-  z-index: 1000;
+  z-index: 1001;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
-  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-  overflow: hidden;
-}
-
-.social-ai-magic-btn::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.3), transparent 70%);
-  transform: scale(0);
-  transition: transform 0.6s ease;
-  pointer-events: none;
+  font-size: 15px;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.5);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  padding: 0;
 }
 
 .social-ai-magic-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
-  background: linear-gradient(135deg, #4f46e5, #9333ea);
-}
-
-.social-ai-magic-btn:hover::before {
-  transform: scale(1);
+  transform: scale(1.1) rotate(10deg);
+  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.6);
+  filter: brightness(1.1);
 }
 
 .social-ai-magic-btn:active {
-  transform: scale(0.95);
+  transform: scale(0.9);
 }
 
 .social-ai-magic-btn.loading {
-  animation: social-ai-spin 2s linear infinite;
+  animation: social-ai-pulse 1.2s infinite ease-in-out;
   pointer-events: none;
-  opacity: 0.8;
-  background: #6366f1;
 }
 
-@keyframes social-ai-spin {
-  0% { filter: hue-rotate(0deg); }
-  100% { filter: hue-rotate(360deg); }
+@keyframes social-ai-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.6);
+  }
+
+  70% {
+    transform: scale(1.1);
+    opacity: 0.8;
+    box-shadow: 0 0 0 8px rgba(99, 102, 241, 0);
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0);
+  }
 }
 
 /* Status Indicator */
